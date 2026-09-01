@@ -10,18 +10,12 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const pool = process.env.DATABASE_URL
-  ? new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    })
-  : new Pool({
-      user: 'postgres',
-      host: 'localhost',
-      database: 'ucr_ai_app',
-      password: 'adele2025',
-      port: 5432,
-    });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL
+    ? { rejectUnauthorized: false }
+    : false,
+});
 
 app.get('/student', (req, res) => {
   res.json({
@@ -33,10 +27,6 @@ app.get('/student', (req, res) => {
 app.post('/question', async (req, res) => {
   try {
     const { question } = req.body;
-
-    console.log('POST route hit');
-    console.log('Body:', req.body);
-
     const aiResponse = await openai.responses.create({
       model: 'gpt-4.1-mini',
       input: `
@@ -110,26 +100,8 @@ app.get('/questions', async (req, res) => {
   }
 });
 
-app.get('/debug-columns', async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT column_name, data_type, is_nullable
-      FROM information_schema.columns
-      WHERE table_name = 'questions'
-      ORDER BY ordinal_position
-    `);
-
-    res.json(result.rows);
-  } catch (error) {
-    console.error('GET /debug-columns error:', error);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
-});
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-setInterval(() => {}, 1000);
