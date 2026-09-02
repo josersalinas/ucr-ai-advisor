@@ -4,6 +4,11 @@ UCR AI Advisor is a full-stack AI assistant designed to help UC Riverside studen
 
 The application sends user questions to an OpenAI model, returns a concise AI-generated response, and stores the question, response, and timestamp in a PostgreSQL database.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/57cdb8db-decb-4f0e-af8f-0e4ebc6ffae5" width="50%" alt="UCR AI Advisor question interface">
+  <img src="https://github.com/user-attachments/assets/7208396b-d4b6-47c0-8a11-fe017c588725" width="45%" alt="UCR AI Advisor response example">
+</p>
+
 ## Live Demo
 
 Try the app here: https://ucr-ai-advisor.onrender.com
